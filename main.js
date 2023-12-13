@@ -27,7 +27,12 @@ if (playGame) {
           ? alert(`${playerone} You lost! Computer won!! ${computer}`)
           : playerone === "scissors" && computer === "rock"
           ? alert(`${playerone} You lost! Computer won!! ${computer}`)
-          : alert(`${playerone} You won ! Congratulations, Computer lost ${computer}`);
+          : alert(
+              `${playerone} You won ! Congratulations, Computer lost ${computer}`
+            );
+
+      let playagain = confirm("You wanna play again?");
+      playagain ? location.reload() : alert("Okay bye bye!!");
     } else {
       alert("You didn't entered rock, paper or scissors properly!.");
     }
