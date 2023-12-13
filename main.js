@@ -1,44 +1,97 @@
-let playGame = confirm("You wanna Play rock, paper or scissors?");
+// rock, paper, scissors : refactored with Functions and Arrays
+const initGame = () => {
+  const startGame = confirm("Shall we play rock, paper, scissors?");
+  startGame ? playGame() : alert("Ok, Maybe next time");
+};
 
-if (playGame) {
-  let playerchoice = prompt("Enter rock, paper or scissors");
-  if (playerchoice) {
-    let playerone = playerchoice.trim().toLowerCase();
-    if (
-      playerone === "rock" ||
-      playerone === "paper" ||
-      playerone === "scissors"
-    ) {
-      let computerChoice = Math.floor(Math.random() * 3 + 1);
-
-      let computer =
-        computerChoice === "1"
-          ? "rock"
-          : computerChoice === "2"
-          ? "paper"
-          : "scissors";
-
-      let result =
-        playerone === computer
-          ? alert("Tie Game")
-          : playerone === "rock" && computer === "paper"
-          ? alert(`${playerone} You lost! Computer won!! ${computer}`)
-          : playerone === "paper" && computer === "scissors"
-          ? alert(`${playerone} You lost! Computer won!! ${computer}`)
-          : playerone === "scissors" && computer === "rock"
-          ? alert(`${playerone} You lost! Computer won!! ${computer}`)
-          : alert(
-              `${playerone} You won ! Congratulations, Computer lost ${computer}`
-            );
-
-      let playagain = confirm("You wanna play again?");
-      playagain ? location.reload() : alert("Okay bye bye!!");
-    } else {
-      alert("You didn't entered rock, paper or scissors properly!.");
+//Game flow function
+const playGame = () => {
+  while (true) {
+    let playerChoice = getPlayerChoice();
+    playerChoice = formatPlayerChoice(playerChoice);
+    if (playerChoice === "") {
+      invalidChoice();
+      continue;
     }
-  } else {
-    alert("I guessed you changed your mind maybe next time.");
+    if (!playerChoice) {
+      decidedNotToPlay();
+      break;
+    }
+    playerChoice = evaluatePlayerChoice(playerChoice);
+    if (!playerChoice) {
+      invalidChoice();
+      continue;
+    }
+    const computerChoice = getComputerChoice();
+    const result = determineWinner(playerChoice, computerChoice);
+    displayResult(result);
+    if (askToPlayAgain()) {
+      continue;
+    } else {
+      thanksForPlaying();
+      break;
+    }
   }
-} else {
-  alert("Okay, Maybe next time.");
-}
+};
+const getPlayerChoice = () => {
+  return prompt("Please Enter rock, paper, or scissors.");
+};
+const formatPlayerChoice = (playerChoice) => {
+  if (playerChoice || playerChoice === "") {
+    return playerChoice.trim().toLowerCase();
+  } else {
+    return false;
+  }
+};
+const decidedNotToPlay = () => {
+  alert("I Guess you changed your mind. Maybe next time.");
+};
+const evaluatePlayerChoice = (playerChoice) => {
+  if (
+    playerChoice === "rock" ||
+    playerChoice === "paper" ||
+    playerChoice === "scissors"
+  ) {
+    return playerChoice;
+  } else {
+    return false;
+  }
+};
+
+const invalidChoice = () => {
+  alert("You didn't enter rock, paper, or scissors.");
+};
+const getComputerChoice = () => {
+  const randomNumber = Math.floor(Math.random() * 3);
+  const rpsArray = ["rock", "paper", "scissors"];
+  return rpsArray[randomNumber];
+};
+
+const determineWinner = (player, computer) => {
+  const winner =
+    player === computer
+      ? "Tie game!"
+      : player === "rock" && computer === "paper"
+      ? `playerOne: ${player}\nComputer: ${computer}\nComputer wins!`
+      : player === "paper" && computer === "scissors"
+      ? `playerOne: ${player}\nComputer: ${computer}\nComputer wins!`
+      : player === "scissors" && computer === "rock"
+      ? `playerOne: ${player}\nComputer: ${computer}\nComputer wins!`
+      : `playerOne: ${player}\nComputer: ${computer}\nplayerOne wins!`;
+
+  return winner;
+};
+
+const displayResult = (result) => {
+  alert(result);
+};
+
+const askToPlayAgain = () => {
+  return confirm("Play Again?");
+};
+
+const thanksForPlaying = () => {
+  alert("Ok, Thanks for playing.");
+};
+
+initGame();
